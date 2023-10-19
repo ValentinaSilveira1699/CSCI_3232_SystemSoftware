@@ -1,4 +1,23 @@
-public class A2p3 {
+/*
+Write a Java program A1p3.java with a public class A1p3 and no named packages that accepts two command line arguments m and n where m is assumed to be a multiple of 60 (e.g. 60,120,etc) and n is an integer between 2 and 6 inclusive. Generate a string of m random upper case English characters and store them in a char array. Use the Thread class to create n threads to convert the m chars of your array in place into a backward-offset lower case version. You should divide this conversion task among the n threads as evenly as possible. Print out the string (i.e. all array elements) both before and after conversion on two separate lines. Hint: you should not have code to print messages in your run method(s) of your task classes. You may refer to TaskThreadDemo.java for examples. Note: if you do not use Thread to divide the conversion task among the n threads, you will get zero points. A sample run for A1p2 and A1p3 can look like the following:
+[kwang@computer][~/work/]$ java A1p2 60
+Generated a string of 60 chars.
+Original random upper case string:
+WWUSFJMDYTARKQLQZGIXVUOWYMURRMPUFXGMIFVSHVTGEYJSCNRDFQMERIWB
+Backward-offset lower case string:
+vvtreilcxszqjpkpyfhwutnvxltqqlotewflheurgusfdxirbmqcepldqhva 
+
+[kwang@computer][~/work/]$ java A1p3 60 3
+Using 3 threads to handle 60 chars.
+Original random upper case string:
+CSORWDNVRCMZHAGGZBASAVZMWCXXIIVKCKBZPRWJTIICLPJKSJESGDECHEBP
+Backward-offset lower case string:
+brnqvcmuqblygzffyazrzuylvbwwhhujbjayoqvishhbkoijridrfcdbgdao
+*/
+
+import java.util.*;
+
+public class A1p3 {
 
 public static void main(String[] args) {
 	// The program expects two arguments: m and n.
@@ -47,7 +66,7 @@ public static void main(String[] args) {
 	}
 
 	// Print the modified string.
-	System.out.println("Reverse-offset lower case string:");
+	System.out.println("Backward-offset lower case string:");
 	System.out.println(chars);
 	}
 
@@ -74,14 +93,22 @@ private static class Task implements Runnable {
 	}
 
 	// The run method is called when the thread starts.
-	public void run() {
-		// This loop iterates over the chunk of the string that this thread is responsible for.
-		for (int i = startIndex; i < endIndex; i++) {
-			// Convert each character to lowercase and shift it by 25 positions.
-			chars[i] = (char) ('a' + ('Z' - chars[i]));
-		}
-	}
+	// The run method is called when the thread starts.
+public void run() {
+    // This loop iterates over the chunk of the string that this thread is responsible for.
+    for (int i = startIndex; i < endIndex; i++) {
+        // Check if the character is an uppercase letter before conversion.
+        if (Character.isUpperCase(chars[i])) {
+            // Convert each uppercase character to lowercase.
+            chars[i] = Character.toLowerCase(chars[i]);
+
+            // Shift it by 25 positions, considering the alphabet loop.
+            chars[i] = (char) ((chars[i] - 'a' + 25) % 26 + 'a');
+        }
+    }
 }
+
 
 }
 
+}
